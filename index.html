@@ -3,33 +3,35 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="ad.orientation" content="portrait" />
+<meta name="ad.size" content="width=320,height=480" />
 <title>Drag Triple Cell Move Playable v4</title>
 <style>
-:root{--bg1:#eef8ff;--bg2:#dff2ff;--panel:#ffffffcc;--cell:linear-gradient(180deg,#cfeeff 0%,#bfe6fb 100%);--accent:#4a9fe8;--text:#224}
+:root{--bg1:#eef8ff;--bg2:#dff2ff;--panel:#ffffffcc;--cell:linear-gradient(180deg,#cfeeff 0%,#bfe6fb 100%);--accent:#4a9fe8;--text:#224;--line:#87bde8}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;width:100%;height:100%;overflow:hidden;font-family:Arial,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;background:linear-gradient(180deg,var(--bg1),var(--bg2));color:var(--text);touch-action:none;user-select:none}
-#app{width:100%;height:100%;display:flex;justify-content:center;align-items:stretch}
-.game{width:min(100vw,1080px);height:100%;padding:10px 10px 14px;display:flex;flex-direction:column;gap:10px;position:relative}
-.hud{background:var(--panel);border:3px solid var(--line);border-radius:22px;padding:10px 12px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;box-shadow:0 5px 18px rgba(60,120,180,.12)}
-.leftBox,.rightBox{display:flex;flex-direction:column;gap:6px}.titleSmall{font-size:16px;font-weight:800}
-.counter{background:#fff;border:3px solid #8b9fc0;border-radius:16px;font-weight:900;font-size:18px;padding:5px 12px;min-width:86px;text-align:center}
-.timerWrap{display:flex;flex-direction:column;align-items:center;gap:4px}.timer{font-size:46px;font-weight:900;line-height:1}
-.barOuter{width:130px;height:10px;border-radius:999px;background:#d6ecd6;overflow:hidden;border:2px solid #789c78}.barInner{height:100%;width:100%;background:linear-gradient(90deg,#98e08e,#6fc76c)}
+#app{width:320px;height:480px;display:flex;justify-content:center;align-items:stretch;overflow:hidden;margin:0 auto;position:relative}
+.game{width:320px;height:480px;padding:8px 8px 10px;display:flex;flex-direction:column;gap:6px;position:relative;overflow:hidden}
+.hud{background:var(--panel);border:2px solid var(--line);border-radius:16px;padding:6px 8px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:4px;box-shadow:0 4px 12px rgba(60,120,180,.12)}
+.leftBox,.rightBox{display:flex;flex-direction:column;gap:3px}.titleSmall{font-size:11px;font-weight:800}
+.counter{background:#fff;border:2px solid #8b9fc0;border-radius:12px;font-weight:900;font-size:13px;padding:4px 8px;min-width:58px;text-align:center}
+.timerWrap{display:flex;flex-direction:column;align-items:center;gap:2px}.timer{font-size:24px;font-weight:900;line-height:1}
+.barOuter{width:82px;height:8px;border-radius:999px;background:#d6ecd6;overflow:hidden;border:1px solid #789c78}.barInner{height:100%;width:100%;background:linear-gradient(90deg,#98e08e,#6fc76c)}
 .board{
   flex:1;
   display:grid;
   grid-template-columns:repeat(4,1fr);
   column-gap:2px;
-  row-gap:-100px;
+  row-gap:2px;
   min-height:0;
 }
 .cell{
   position:relative;
-  border-radius:10px;
-  border:2px solid var(--line);
-  background: url('images/Background_tray.png') center center / 100% 55% no-repeat;
-  min-height:20px;
-  box-shadow:inset 0 2px 0 rgba(255,255,255,.55);
+  border-radius:8px;
+  border:1px solid var(--line);
+  background: url('images/Background_tray.png') center center / 100% 78% no-repeat;
+  min-height:44px;
+  box-shadow:none;
   overflow:hidden;
   transition:transform .10s ease,box-shadow .10s ease,border-color .10s ease;
 }
@@ -38,26 +40,24 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;font-family:Arial,"App
 .cell.invalid{animation:shake .28s linear}
 
 .piece{
-  position:absolute;width:43%;aspect-ratio:.82;border-radius:16px;display:flex;align-items:center;justify-content:center;
-  
+  position:absolute;width:40%;aspect-ratio:.82;border-radius:12px;display:flex;align-items:center;justify-content:center;
   transition:left .12s ease, top .12s ease, opacity .12s ease, transform .12s ease;
 }
 .piece img{width:100%;height:100%;object-fit:contain;pointer-events:none}
 .piece span{line-height:1;pointer-events:none}
 .piece.draggable{cursor:grab;touch-action:none}
 .piece.source-hidden{opacity:.22}
-.slotBadge{position:absolute;bottom:4px;right:6px;font-size:10px;font-weight:900;color:rgba(30,60,100,.35);pointer-events:none}
-.controls{display:flex;gap:8px;justify-content:center;align-items:center}
-.btn{border:none;border-radius:14px;background:var(--accent);color:white;font-weight:800;padding:10px 16px;font-size:16px;box-shadow:0 4px 12px rgba(74,159,232,.25)}
+.slotBadge{display:none}
+.controls{display:flex;gap:6px;justify-content:center;align-items:center}
+.btn{border:none;border-radius:12px;background:var(--accent);color:white;font-weight:800;padding:8px 12px;font-size:13px;box-shadow:0 4px 12px rgba(74,159,232,.25)}
 .btn.cta{background:linear-gradient(180deg,#65d667,#42bb4b)}
 .toast{position:absolute;left:50%;top:94px;transform:translateX(-50%);background:#25364be6;color:white;padding:8px 14px;border-radius:999px;font-weight:700;opacity:0;pointer-events:none;transition:opacity .2s ease;z-index:5}
 .toast.show{opacity:1}.overlay{position:absolute;inset:0;display:none;align-items:center;justify-content:center;background:rgba(14,34,58,.35);z-index:20}.overlay.show{display:flex}
-.modal{width:min(90%,360px);background:white;border-radius:24px;border:4px solid var(--line);text-align:center;padding:22px 18px;box-shadow:0 14px 40px rgba(0,0,0,.2)}
-.modal h2{margin:0 0 10px;font-size:32px}.modal p{margin:0 0 16px;font-size:17px}.modal .btn{width:100%;font-size:20px;padding:14px}
+.modal{width:min(90%,280px);background:white;border-radius:18px;border:3px solid var(--line);text-align:center;padding:18px 14px;box-shadow:0 14px 40px rgba(0,0,0,.2)}
+.modal h2{margin:0 0 8px;font-size:24px}.modal p{margin:0 0 12px;font-size:14px}.modal .btn{width:100%;font-size:16px;padding:10px}
 .drag-ghost{
-  position:fixed; width:110px; aspect-ratio:.82; border-radius:14px; display:flex; align-items:center; justify-content:center;
- 
-  font-size:26px; z-index:9999; pointer-events:none; transform:translate(-50%,-50%) scale(.92);
+  position:fixed; width:62px; aspect-ratio:.82; border-radius:10px; display:flex; align-items:center; justify-content:center;
+  font-size:18px; z-index:9999; pointer-events:none; transform:translate(-50%,-50%) scale(.92);
 }
 .drag-ghost img{width:84%;height:84%;object-fit:contain;pointer-events:none}
 .drag-ghost .slotBadge{display:none}
@@ -99,6 +99,72 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;font-family:Arial,"App
   filter:drop-shadow(0 0 6px rgba(255,255,170,.95));
 }
 
+
+.tutorial{
+  position:absolute;
+  inset:0;
+  z-index:30;
+  pointer-events:none;
+}
+.tutorial.hide{
+  display:none;
+}
+.tutorial-hand{
+  position:absolute;
+  left:0;
+  top:0;
+  font-size:32px;
+  filter:drop-shadow(0 3px 6px rgba(0,0,0,.18));
+  transform:translate(-50%,-50%);
+  animation:handMovePath 1.15s ease-in-out infinite;
+}
+.tutorial-text{
+  position:absolute;
+  left:0;
+  top:0;
+  transform:translate(-50%,-50%);
+  background:rgba(0,0,0,.72);
+  color:#fff;
+  padding:6px 10px;
+  border-radius:999px;
+  font-weight:700;
+  font-size:12px;
+  white-space:nowrap;
+}
+.tutorial-glow{
+  position:absolute;
+  left:0;
+  top:0;
+  width:36px;
+  height:36px;
+  border-radius:999px;
+  border:3px solid rgba(255,210,90,.95);
+  box-shadow:0 0 0 10px rgba(255,210,90,.14);
+  transform:translate(-50%,-50%);
+  animation:tutorialPulse 1.15s ease-in-out infinite;
+}
+.tutorial-arrow{
+  position:absolute;
+  left:0;
+  top:0;
+  width:0;
+  height:4px;
+  background:linear-gradient(90deg, rgba(255,210,90,.1), rgba(255,210,90,.95));
+  transform-origin:left center;
+  border-radius:999px;
+  opacity:.95;
+}
+@keyframes handMovePath{
+  0%{transform:translate(calc(-50% + 0px),calc(-50% + 0px)) scale(1)}
+  50%{transform:translate(calc(-50% + var(--hand-dx,54px)),calc(-50% + var(--hand-dy,0px))) scale(1.06)}
+  100%{transform:translate(calc(-50% + 0px),calc(-50% + 0px)) scale(1)}
+}
+@keyframes tutorialPulse{
+  0%{transform:translate(-50%,-50%) scale(.9);opacity:.7}
+  50%{transform:translate(-50%,-50%) scale(1.05);opacity:1}
+  100%{transform:translate(-50%,-50%) scale(.9);opacity:.7}
+}
+
 </style>
 </head>
 <body>
@@ -108,13 +174,21 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;font-family:Arial,"App
 <div class="timerWrap"><div class="timer" id="timer">00:45</div><div class="barOuter"><div class="barInner" id="timeBar"></div></div></div>
 <div class="rightBox" style="align-items:flex-end;"><div class="titleSmall">Moves</div><div class="counter" id="moves">0</div></div>
 </div>
+
+<div id="tutorialOverlay" class="tutorial">
+  <div class="tutorial-text">Drag here!</div>
+  <div class="tutorial-glow" id="tutorialGlow"></div>
+  <div class="tutorial-arrow" id="tutorialArrow"></div>
+  <div class="tutorial-hand" id="tutorialHand">👆</div>
+</div>
+
 <div class="toast" id="toast"></div>
 <div class="board" id="board"></div>
 <div class="controls"><button class="btn" id="restartBtn">retry</button><button class="btn cta" id="ctaBtn">Install</button></div>
 <div class="overlay" id="overlay"><div class="modal"><h2 id="resultTitle">성공!</h2><p id="resultText">목표를 달성했어요.</p><button class="btn cta" id="resultBtn">Play Now</button></div></div>
 </div></div>
 <script>
-const CONFIG={maxPerCell:3,duration:45,goal:12,imageMode:false,ctaUrl:'https://play.google.com/store/apps/details?id=com.xpup.doll3match',imageMode:true,
+const CONFIG={maxPerCell:3,duration:45,goal:12,ctaUrl:'https://play.google.com/store/apps/details?id=com.xpup.doll3match',imageMode:true,
 types:{
   pink:{imageSrc:'images/Doll_1.png'},
   cream:{imageSrc:'images/Doll_2.png'},
@@ -125,21 +199,25 @@ types:{
 
 }};
 
+function makeAudio(paths){
+  const a = new Audio(paths[0]);
+  a.dataset.paths = JSON.stringify(paths);
+  return a;
+}
+
 const audio = {
-  bgm: new Audio('sounds/InGameBGM.wav'),
-  pick: new Audio('sounds/Pick.wav'),
-  put: new Audio('sounds/Put.ogg'),
-  good: new Audio('sounds/Combo_0.wav')
+  pick: makeAudio(['sounds/pick.wav']),
+  put: makeAudio(['sounds/put.ogg']),
+  good: makeAudio(['sounds/Combo_0.wav'])
 };
 
-audio.bgm.loop = true;
-audio.bgm.volume = 0.35;
+
 audio.pick.volume = 0.65;
 audio.put.volume = 0.75;
 audio.good.volume = 0.95;
 
 let audioUnlocked = false;
-let bgmStarted = false;
+
 
 function unlockAudio(){
   if(audioUnlocked) return;
@@ -160,27 +238,13 @@ function unlockAudio(){
     }catch(e){}
   });
 
-  startBGM();
 }
 
-function startBGM(){
-  if(!audioUnlocked || bgmStarted) return;
-  bgmStarted = true;
-  try{
-    const p = audio.bgm.play();
-    if (p && typeof p.then === 'function') {
-      p.catch(() => {
-        bgmStarted = false;
-      });
-    }
-  }catch(e){
-    bgmStarted = false;
-  }
-}
+
 
 function playSound(name){
   const src = audio[name];
-  if(!src || !audioUnlocked || name === 'bgm') return;
+  if(!src || !audioUnlocked) return;
   try{
     src.pause();
     src.currentTime = 0;
@@ -200,28 +264,89 @@ let state=null,timerInterval=null,dragState=null,toastTimer=null,lastDropIndex=n
 const boardEl=document.getElementById('board'),timerEl=document.getElementById('timer'),timeBarEl=document.getElementById('timeBar'),
 progressEl=document.getElementById('progress'),goalEl=document.getElementById('goal'),movesEl=document.getElementById('moves'),
 toastEl=document.getElementById('toast'),overlayEl=document.getElementById('overlay'),
+tutorialEl=document.getElementById('tutorialOverlay'),
+tutorialGlowEl=document.getElementById('tutorialGlow'),
+tutorialHandEl=document.getElementById('tutorialHand'),
+tutorialArrowEl=document.getElementById('tutorialArrow'),
 resultTitleEl=document.getElementById('resultTitle'),resultTextEl=document.getElementById('resultText');
+const TUTORIAL = {
+  sourceCell: 6,
+  sourceSlot: 0,
+  targetCell: 2
+};
+
 goalEl.textContent=CONFIG.goal;
 document.getElementById('restartBtn').addEventListener('click',initGame);
 document.getElementById('ctaBtn').addEventListener('click',openCTA);
 document.getElementById('resultBtn').addEventListener('click',openCTA);
 window.addEventListener('pointerdown', unlockAudio, { once:true });
 window.addEventListener('keydown', unlockAudio, { once:true });
+window.addEventListener('resize', () => { if(state && !state.started) updateTutorialOverlay(); });
 
 function initGame(){
   clearInterval(timerInterval);
-  state={board:BOARD_TEMPLATE.map(s=>s.filter(Boolean)),progress:0,moves:0,remaining:CONFIG.duration,finished:false};
+  state={board:BOARD_TEMPLATE.map(s=>[...s]),progress:0,moves:0,remaining:CONFIG.duration,finished:false,started:false};
   cleanupDrag();
   overlayEl.classList.remove('show');
+  if(tutorialEl) tutorialEl.classList.remove('hide');
   render();
-  timerInterval=setInterval(tick,1000);
+  setTimeout(updateTutorialOverlay, 0);
 }
 function tick(){
-  if(state.finished)return;
+  if(!state.started || state.finished)return;
   state.remaining-=1;
   if(state.remaining<=0){state.remaining=0;renderHUD();endGame(false);return}
   renderHUD();
 }
+function updateTutorialOverlay(){
+  if(!tutorialEl || !state || state.started) return;
+  const sourceSelector = `.piece[data-cell-index="${TUTORIAL.sourceCell}"][data-slot-index="${TUTORIAL.sourceSlot}"]`;
+  const sourcePiece = boardEl.querySelector(sourceSelector);
+  const targetCell = boardEl.children[TUTORIAL.targetCell];
+  const gameEl = document.querySelector('.game');
+  if(!sourcePiece || !targetCell || !gameEl) return;
+
+  const gameRect = gameEl.getBoundingClientRect();
+  const s = sourcePiece.getBoundingClientRect();
+  const t = targetCell.getBoundingClientRect();
+
+  const sx = s.left + s.width/2 - gameRect.left;
+  const sy = s.top + s.height/2 - gameRect.top;
+  const tx = t.left + t.width/2 - gameRect.left;
+  const ty = t.top + t.height/2 - gameRect.top;
+
+  tutorialGlowEl.style.left = `${sx}px`;
+  tutorialGlowEl.style.top = `${sy}px`;
+
+  tutorialHandEl.style.left = `${sx}px`;
+  tutorialHandEl.style.top = `${sy + 10}px`;
+
+  const dx = tx - sx;
+  const dy = ty - sy;
+  tutorialHandEl.style.setProperty('--hand-dx', `${dx}px`);
+  tutorialHandEl.style.setProperty('--hand-dy', `${dy}px`);
+
+  tutorialArrowEl.style.left = `${sx}px`;
+  tutorialArrowEl.style.top = `${sy}px`;
+  tutorialArrowEl.style.width = `${Math.max(24, Math.hypot(dx, dy) - 28)}px`;
+  tutorialArrowEl.style.transform = `rotate(${Math.atan2(dy, dx)}rad)`;
+
+  const tutorialText = tutorialEl.querySelector('.tutorial-text');
+  if(tutorialText){
+    tutorialText.style.left = `${(sx + tx)/2}px`;
+    tutorialText.style.top = `${Math.min(sy, ty) - 32}px`;
+  }
+}
+
+function startGame(){
+  if(!state || state.started || state.finished) return;
+  state.started = true;
+  if(tutorialEl) tutorialEl.classList.add('hide');
+  unlockAudio();
+  clearInterval(timerInterval);
+  timerInterval=setInterval(tick,1000);
+}
+
 function render(){
   renderHUD();
   boardEl.innerHTML='';
@@ -229,15 +354,20 @@ function render(){
     const cell=document.createElement('div');
     cell.className='cell';
     cell.dataset.index=index;
-    if(stack.length===0){
+    const filledCount = stack.filter(v => v != null).length;
+    if(filledCount===0){
       const hint=document.createElement('div');
       hint.className='slotHint';
       hint.textContent='+';
       cell.appendChild(hint);
     }
-    stack.forEach((type,slotIndex)=>cell.appendChild(createPiece(type,slotIndex,index)));
+    stack.forEach((type,slotIndex)=>{
+      if(type == null) return;
+      cell.appendChild(createPiece(type,slotIndex,index));
+    });
     boardEl.appendChild(cell);
   });
+  if(!state.started) setTimeout(updateTutorialOverlay, 0);
 }
 function createPiece(type,slotIndex,cellIndex){
   const info=CONFIG.types[type],piece=document.createElement('div');
@@ -250,7 +380,13 @@ function createPiece(type,slotIndex,cellIndex){
   piece.style.left=pos.left+'%';
   piece.style.top=pos.top+'%';
   piece.style.transform='translate(-50%, -50%)';
-  piece.addEventListener('pointerdown',startDrag);
+  const isTutorialPiece = !state.started && cellIndex === TUTORIAL.sourceCell && slotIndex === TUTORIAL.sourceSlot;
+  if(state.started || isTutorialPiece){
+    piece.addEventListener('pointerdown',startDrag);
+  } else {
+    piece.classList.remove('draggable');
+    piece.style.opacity = '0.65';
+  }
 
   if(CONFIG.imageMode&&info.imageSrc){
     const img=document.createElement('img');
@@ -310,8 +446,17 @@ function endDrag(e){
   e.preventDefault();
   const idx=getCellIndexAt(e.clientX,e.clientY);
   const {fromIndex,slotIndex}=dragState;
+  const tutorialMode = !state.started;
   cleanupDrag();
   if(idx===null){ render(); return; }
+  if(tutorialMode && idx !== TUTORIAL.targetCell){ 
+    showToast('Drag to the highlighted slot!');
+    if(tutorialEl) tutorialEl.classList.remove('hide');
+    setTimeout(updateTutorialOverlay, 0);
+    render(); 
+    return; 
+  }
+  if(!state.started) startGame();
   moveAnyPiece(fromIndex,slotIndex,idx);
 }
 function cleanupDrag(){
@@ -336,22 +481,27 @@ function getCellIndexAt(x,y){
 function moveAnyPiece(fromIndex,slotIndex,toIndex){
   const from=state.board[fromIndex],to=state.board[toIndex];
   if(!from || slotIndex<0 || slotIndex>=from.length) { render(); return; }
-  if(to.length>=CONFIG.maxPerCell){ flashInvalid(toIndex,'Full'); return; }
+  if(from[slotIndex] == null) { render(); return; }
 
-  const moving=from.splice(slotIndex,1)[0];
+  const emptyIndex = to.findIndex(v => v == null);
+  if(emptyIndex === -1){ flashInvalid(toIndex,'Full'); return; }
+
+  const moving=from[slotIndex];
+  from[slotIndex]=null;
   playSound('put');
-  to.push(moving);
+  to[emptyIndex]=moving;
   state.moves+=1;
 
-  if(to.length===CONFIG.maxPerCell){
-    const [a,b,c]=to;
+  const filledCount = to.filter(v => v != null).length;
+  if(filledCount===CONFIG.maxPerCell){
+    const filled = to.filter(v => v != null);
+    const [a,b,c]=filled;
     if(a===b && b===c){
-      const clearedType=a;
       render();
       playMatchEffect(toIndex);
       playSound('good');
       setTimeout(()=>{
-        state.board[toIndex]=[];
+        state.board[toIndex]=[null,null,null];
         state.progress+=1;
         showToast('success!');
         if(state.progress>=CONFIG.goal){
@@ -435,12 +585,21 @@ function renderHUD(){
 function endGame(win){
   if(state.finished)return;
   state.finished=true;
+  if(tutorialEl) tutorialEl.classList.add('hide');
   clearInterval(timerInterval);
   resultTitleEl.textContent=win?'success!':'It is a waste!';
   resultTextEl.textContent=win?'installation is Free':'installation is Free';
   overlayEl.classList.add('show');
 }
-function openCTA(){ window.open(CONFIG.ctaUrl,'_blank'); }
+function openCTA(){
+  try{
+    if (window.ExitApi && typeof ExitApi.exit === 'function') {
+      ExitApi.exit();
+      return;
+    }
+  }catch(e){}
+  window.open(CONFIG.ctaUrl,'_blank');
+}
 initGame();
 </script>
 </body>
