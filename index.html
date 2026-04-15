@@ -20,15 +20,16 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;font-family:Arial,"App
 .board{
   flex:1;
   display:grid;
-  grid-template-columns:repeat(4,1fr);
+  grid-template-columns:repeat(3,1fr);
   column-gap:2px;
   row-gap:2px;
   min-height:0;
+ 
 }
 .cell{
   position:relative;
   border-radius:8px;
-  border:1px solid var(--line);
+  
   background: url('images/Background_tray.png') center center / 100% 78% no-repeat;
   min-height:44px;
   box-shadow:none;
@@ -170,8 +171,8 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;font-family:Arial,"App
 <body>
 <div id="app"><div class="game">
 <div class="hud">
-<div class="leftBox"><div class="titleSmall">Level 10</div><div class="counter"><span id="progress">0</span> / <span id="goal">12</span></div></div>
-<div class="timerWrap"><div class="timer" id="timer">00:45</div><div class="barOuter"><div class="barInner" id="timeBar"></div></div></div>
+<div class="leftBox"><div class="titleSmall">Level 10</div><div class="counter"><span id="progress">0</span> / <span id="goal">8</span></div></div>
+<div class="timerWrap"><div class="timer" id="timer">00:30</div><div class="barOuter"><div class="barInner" id="timeBar"></div></div></div>
 <div class="rightBox" style="align-items:flex-end;"><div class="titleSmall">Moves</div><div class="counter" id="moves">0</div></div>
 </div>
 
@@ -188,7 +189,7 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;font-family:Arial,"App
 <div class="overlay" id="overlay"><div class="modal"><h2 id="resultTitle">성공!</h2><p id="resultText">목표를 달성했어요.</p><button class="btn cta" id="resultBtn">Play Now</button></div></div>
 </div></div>
 <script>
-const CONFIG={maxPerCell:3,duration:45,goal:12,ctaUrl:'https://play.google.com/store/apps/details?id=com.xpup.doll3match',imageMode:true,
+const CONFIG={maxPerCell:3,duration:30,goal:8,ctaUrl:'https://play.google.com/store/apps/details?id=com.xpup.doll3match',imageMode:true,
 types:{
   pink:{imageSrc:'images/Doll_1.png'},
   cream:{imageSrc:'images/Doll_2.png'},
@@ -257,8 +258,8 @@ const BOARD_TEMPLATE=[
 ['cream','brown','black'],['pink','cream','black'],['pink','pink',null],['bean','bean',null],
 ['cat','brown',null],['pink','brown','brown'],['pink','cream',null],['cat','bean',null],
 ['bean','brown',null],['bean','pink',null],['cat','cat','brown'],['cream','pink','black'],
-['cat','cream',null],['cream','cream',null],['cream','pink',null],['black',null,null],
-['bean','black',null],['bean','cream',null],['cream','black',null],[null,null,null]
+,
+
 ];
 let state=null,timerInterval=null,dragState=null,toastTimer=null,lastDropIndex=null;
 const boardEl=document.getElementById('board'),timerEl=document.getElementById('timer'),timeBarEl=document.getElementById('timeBar'),
